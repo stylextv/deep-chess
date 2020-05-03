@@ -1,4 +1,4 @@
 # DeepChess
 A simple chess game with a minimax ai.
 
-img
+![alt text](screenshots/0.png)
