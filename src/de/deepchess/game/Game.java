@@ -92,6 +92,18 @@ public class Game {
 		}
 		return moves;
 	}
+	public ArrayList<Move> getAllMoves(boolean checkCheck) {
+		ArrayList<Move> moves=new ArrayList<Move>();
+		for(int x=0; x<8; x++) {
+			for(int y=0; y<8; y++) {
+				Piece checkPiece=getPiece(x, y);
+				if(checkPiece!=null&&checkPiece.getColor()==whoseTurn) {
+					getMoves(x, y, moves, checkCheck, true);
+				}
+			}
+		}
+		return moves;
+	}
 	public void getMoves(int x, int y, ArrayList<Move> moves, boolean checkCheck, boolean checkCastle) {
 		int from=y*8+x;
 		

@@ -78,7 +78,7 @@ public class MinimaxAi {
 			return got;
 		}
 		
-		ArrayList<Move> moves=game.getAllMoves();
+		ArrayList<Move> moves=game.getAllMoves(false);
 		Winner winner=game.getWinner(moves.size()==0);
 		if(winner!=Winner.NONE) {
 			evaluted++;
@@ -111,9 +111,11 @@ public class MinimaxAi {
 				boolean isCapture=game.getPiece(m.getTo())!=null;
 				game.performMove(m);
 				
-				int score=max(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
-				if(score<bestMoveScore) {
-					bestMoveScore=score;
+				if(m.isCastle()||!game.isInCheck(game.whoseTurn().opposite())) {
+					int score=max(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
+					if(score<bestMoveScore) {
+						bestMoveScore=score;
+					}
 				}
 				
 				game.undoMove(m);
@@ -130,9 +132,11 @@ public class MinimaxAi {
 				boolean isCapture=game.getPiece(m.getTo())!=null;
 				game.performMove(m);
 				
-				int score=max(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
-				if(score<bestMoveScore) {
-					bestMoveScore=score;
+				if(m.isCastle()||!game.isInCheck(game.whoseTurn().opposite())) {
+					int score=max(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
+					if(score<bestMoveScore) {
+						bestMoveScore=score;
+					}
 				}
 				
 				game.undoMove(m);
@@ -161,7 +165,7 @@ public class MinimaxAi {
 			return got;
 		}
 		
-		ArrayList<Move> moves=game.getAllMoves();
+		ArrayList<Move> moves=game.getAllMoves(false);
 		Winner winner=game.getWinner(moves.size()==0);
 		if(winner!=Winner.NONE) {
 			evaluted++;
@@ -194,9 +198,11 @@ public class MinimaxAi {
 				boolean isCapture=game.getPiece(m.getTo())!=null;
 				game.performMove(m);
 				
-				int score=min(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
-				if(score>bestMoveScore) {
-					bestMoveScore=score;
+				if(m.isCastle()||!game.isInCheck(game.whoseTurn().opposite())) {
+					int score=min(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
+					if(score>bestMoveScore) {
+						bestMoveScore=score;
+					}
 				}
 				
 				game.undoMove(m);
@@ -213,9 +219,11 @@ public class MinimaxAi {
 				boolean isCapture=game.getPiece(m.getTo())!=null;
 				game.performMove(m);
 				
-				int score=min(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
-				if(score>bestMoveScore) {
-					bestMoveScore=score;
+				if(m.isCastle()||!game.isInCheck(game.whoseTurn().opposite())) {
+					int score=min(game, bestMoveScore, depth+1, isCapture ? adjustedDepth : adjustedDepth+1);
+					if(score>bestMoveScore) {
+						bestMoveScore=score;
+					}
 				}
 				
 				game.undoMove(m);
