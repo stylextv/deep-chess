@@ -1,6 +1,5 @@
 package de.deepchess.main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -241,13 +240,13 @@ public class Main {
 	}
 	private static void drawHand(Graphics2D graphics) {
 		if(hand!=null) {
-			graphics.setColor(Color.RED);
-			int ox=width/2-256;
-			int oy=height/2-256;
-			for(Move m:handMoves) {
-				int to=m.getTo();
-				graphics.fillArc(ox+to%8*64+32-10, oy+to/8*64+32-10, 20, 20, 0, 360);
-			}
+//			graphics.setColor(Color.RED);
+//			int ox=width/2-256;
+//			int oy=height/2-256;
+//			for(Move m:handMoves) {
+//				int to=m.getTo();
+//				graphics.fillArc(ox+to%8*64+32-10, oy+to/8*64+32-10, 20, 20, 0, 360);
+//			}
 			graphics.drawImage(hand.getImage(), mouseX+handRenderX, mouseY+handRenderY -4, null);
 		}
 	}
