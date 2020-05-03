@@ -3,6 +3,7 @@ package de.deepchess.game;
 import java.util.ArrayList;
 
 import de.deepchess.ai.MinimaxAi;
+import de.deepchess.ai.StockfishAi;
 
 public class Game {
 	
@@ -12,6 +13,7 @@ public class Game {
 	
 	private PieceColor whoseTurn;
 	private int fiftyRule;
+	private int fullMoveCounter;
 	
 	public Game() {
 		reset();
@@ -19,6 +21,7 @@ public class Game {
 	public void reset() {
 		whoseTurn=PieceColor.WHITE;
 		fiftyRule=0;
+		fullMoveCounter=1;
 		for(int i=0; i<pieces.length; i++) pieces[i]=null;
 		
 		setPiece(0, 0, Piece.BLACK_ROOK.clone());
@@ -540,10 +543,12 @@ public class Game {
 			rook.setMoved(true);
 			pieces[m.getCastleFrom()]=null;
 		}
+		if(whoseTurn==PieceColor.BLACK) fullMoveCounter++;
 		whoseTurn=whoseTurn.opposite();
 	}
 	public void undoMove(Move m) {
 		whoseTurn=whoseTurn.opposite();
+		if(whoseTurn==PieceColor.BLACK) fullMoveCounter--;
 		if(m.isCastle()) {
 			pieces[m.getCastleFrom()]=m.getCastlePiece();
 			pieces[m.getCastleTo()]=null;
@@ -561,6 +566,29 @@ public class Game {
 	}
 	
 	public Move performAiMove() {
+		StockfishAi.setInputGame(this);
+		while(!StockfishAi.hasOutputMove()) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException ex) {}
+		}
+		String move=StockfishAi.getOutputMove();
+		StockfishAi.flushOutputMove();
+		move=move.split(" ")[1];
+		
+		int fromX=RANKS.indexOf(move.charAt(0));
+		int fromY=7-(Integer.valueOf(move.charAt(1)+"")-1);
+		int toX=RANKS.indexOf(move.charAt(2));
+		int toY=7-(Integer.valueOf(move.charAt(3)+"")-1);
+		int from=fromY*8+fromX;
+		int to=toY*8+toX;
+		ArrayList<Move> moves=getAllMoves();
+		for(Move m:moves) {
+			if(m.getTo()==to&&m.getFrom()==from) {
+				performMove(m);
+				return m;
+			}
+		}
 		return MinimaxAi.performMove(this);
 	}
 	
@@ -720,6 +748,106 @@ public class Game {
 		if(!hasPawnJumper) {
 			key=key+" -";
 		}
+		
+		return key;
+	}
+	public String getHash() {
+		String key="";
+		int nullCounter=0;
+		for(int i=0; i<64; i++) {
+			Piece p=pieces[i];
+			if(p==null) {
+				nullCounter++;
+			} else {
+				if(nullCounter!=0) {
+					key=key+nullCounter;
+					nullCounter=0;
+				}
+				
+				char ch=0;
+				switch(p.getType()) {
+				case BISHOP:
+					ch='b';
+					break;
+				case KING:
+					ch='k';
+					break;
+				case KNIGHT:
+					ch='n';
+					break;
+				case PAWN:
+					ch='p';
+					break;
+				case QUEEN:
+					ch='q';
+					break;
+				case ROOK:
+					ch='r';
+					break;
+				}
+				if(p.getColor()==PieceColor.BLACK) key=key+ch;
+				else key=key+(ch+"").toUpperCase();
+			}
+			
+			if(i%8==7&&i!=63) {
+				if(nullCounter!=0) {
+					key=key+nullCounter;
+					nullCounter=0;
+				}
+				key=key+"/";
+			}
+		}
+		if(nullCounter!=0) {
+			key=key+nullCounter;
+			nullCounter=0;
+		}
+		
+		if(whoseTurn==PieceColor.WHITE) key=key+" w";
+		else key=key+" b";
+		String castles="";
+		Piece kingWhite=pieces[7*8+4];
+		Piece kingBlack=pieces[4];
+		if(kingWhite!=null&&kingWhite.getType()==PieceType.KING&&kingWhite.getColor()==PieceColor.WHITE&&!kingWhite.hasMoved()) {
+			Piece rook1=pieces[7*8+7];
+			Piece rook2=pieces[7*8];
+			if(rook1!=null&&rook1.getType()==PieceType.ROOK&&rook1.getColor()==PieceColor.WHITE&&!rook1.hasMoved()) {
+				castles=castles+"K";
+			}
+			if(rook2!=null&&rook2.getType()==PieceType.ROOK&&rook2.getColor()==PieceColor.WHITE&&!rook2.hasMoved()) {
+				castles=castles+"Q";
+			}
+		}
+		if(kingBlack!=null&&kingBlack.getType()==PieceType.KING&&kingBlack.getColor()==PieceColor.BLACK&&!kingBlack.hasMoved()) {
+			Piece rook1=pieces[7];
+			Piece rook2=pieces[0];
+			if(rook1!=null&&rook1.getType()==PieceType.ROOK&&rook1.getColor()==PieceColor.BLACK&&!rook1.hasMoved()) {
+				castles=castles+"k";
+			}
+			if(rook2!=null&&rook2.getType()==PieceType.ROOK&&rook2.getColor()==PieceColor.BLACK&&!rook2.hasMoved()) {
+				castles=castles+"q";
+			}
+		}
+		if(castles.length()==0) castles="-";
+		key=key+" "+castles;
+		
+		boolean hasPawnJumper=false;
+		for(int i=0; i<64; i++) {
+			Piece p=pieces[i];
+			if(p!=null&&p.getColor()!=whoseTurn&&p.didPawnJump()) {
+				int x=i%8;
+				int y=i/8;
+				if(p.getColor()==PieceColor.BLACK) y--;
+				else y++;
+				key=key+" "+RANKS.charAt(x)+((7-y)+1);
+				hasPawnJumper=true;
+				break;
+			}
+		}
+		if(!hasPawnJumper) {
+			key=key+" -";
+		}
+		
+		key=key+" "+fiftyRule+" "+fullMoveCounter;
 		
 		return key;
 	}

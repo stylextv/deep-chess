@@ -19,8 +19,8 @@ public class MinimaxAi {
 	private static int transpositionUses;
 	
 	private static int INFINITY=100000;
-	private static int MAX_DEPTH=7;
-	private static int MAX_ADJUSTED_DEPTH=3;
+	private static int MAX_DEPTH=7;//13
+	private static int MAX_ADJUSTED_DEPTH=3;//7
 	
 	private static Move[] killerMoves=new Move[(MAX_DEPTH-1)*2];
 	private static int killerMoveSwap=0;

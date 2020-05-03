@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import de.deepchess.ai.MinimaxAi;
+import de.deepchess.ai.StockfishAi;
 import de.deepchess.game.Game;
 import de.deepchess.game.Move;
 import de.deepchess.game.Piece;
 import de.deepchess.game.PieceColor;
 import de.deepchess.game.Winner;
 import de.deepchess.render.Renderer;
-import de.deepchess.util.FontUtil;
 import de.deepchess.util.ImageUtil;
 import de.deepchess.util.MathUtil;
 
@@ -48,7 +48,8 @@ public class Main {
 	private static boolean resetGame=false;
 	
 	public static void main(String[] args) {
-		FontUtil.load();
+		StockfishAi.start();
+		
 		ImageUtil.load();
 		game=new Game();
 		createWindow();
@@ -112,6 +113,7 @@ public class Main {
 		while(running) {
 			runGameLoop();
 		}
+		StockfishAi.kill();
 		System.exit(0);
 	}
 	
@@ -251,7 +253,7 @@ public class Main {
 		}
 	}
 	private static void drawBanner(Graphics2D graphics) {
-		if(winner!=Winner.NONE) {
+		if(winner!=Winner.NONE&&lastAiMove==null) {
 			BufferedImage banner=null;
 			switch(winner) {
 			case BLACK:
