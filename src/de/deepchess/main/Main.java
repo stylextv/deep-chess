@@ -21,6 +21,7 @@ import de.deepchess.game.Piece;
 import de.deepchess.game.PieceColor;
 import de.deepchess.game.Winner;
 import de.deepchess.render.Renderer;
+import de.deepchess.util.AudioUtil;
 import de.deepchess.util.ImageUtil;
 import de.deepchess.util.MathUtil;
 
@@ -50,6 +51,7 @@ public class Main {
 	public static void main(String[] args) {
 		StockfishAi.start();
 		
+		AudioUtil.load();
 		ImageUtil.load();
 		game=new Game();
 		createWindow();
@@ -121,8 +123,10 @@ public class Main {
 		long before=System.nanoTime();
 		
 		if(lastAiMove!=null) {
-			if(lastAiMoveAni<1) lastAiMoveAni+=1/32.0;
-			else lastAiMove=null;
+			if(lastAiMoveAni<1) {
+				lastAiMoveAni+=1/32.0;
+				if(lastAiMoveAni==0.75) AudioUtil.play(AudioUtil.PIECE_PUT);
+			} else lastAiMove=null;
 		}
 		renderer.paintImmediately(0, 0, renderer.getWidth(), renderer.getHeight());
 		if(winner==Winner.NONE&&game.whoseTurn()==PieceColor.BLACK) {
@@ -166,6 +170,7 @@ public class Main {
 							game.setPiece(handFromX, handFromY, hand);
 							hand=null;
 							game.performMove(m);
+							AudioUtil.play(AudioUtil.PIECE_PUT);
 							checkForWinner();
 						} else {
 							game.setPiece(handFromX, handFromY, hand);

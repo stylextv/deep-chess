@@ -167,7 +167,7 @@ public class ImageUtil {
 //	private static double sigmoid(double x) {
 //		return (1/( 1 + Math.pow(Math.E,(-1*(x*16-8)))));
 //	}
-	public static BufferedImage loadImage(String name) throws IOException {
+	private static BufferedImage loadImage(String name) throws IOException {
 		return ImageIO.read(ImageUtil.class.getClassLoader().getResourceAsStream("assets/textures/"+name));
 	}
 	
