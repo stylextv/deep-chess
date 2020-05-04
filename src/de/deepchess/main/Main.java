@@ -48,10 +48,15 @@ public class Main {
 	
 	private static Winner winner=Winner.NONE;
 	private static int bannerFrame=0;
+	private static boolean drawErrorPopup;
+	private static int errorPopupFrame=0;
 	private static boolean resetGame=false;
 	
 	public static void main(String[] args) {
-		StockfishAi.start();
+		if(!StockfishAi.start()) {
+			ImageUtil.loadErrorPopup();
+			drawErrorPopup=true;
+		}
 		
 		AudioUtil.load();
 		ImageUtil.load();
@@ -124,69 +129,73 @@ public class Main {
 	private static void runGameLoop() {
 		long before=System.nanoTime();
 		
-		if(lastAiMove!=null) {
-			if(lastAiMoveAni<1) {
-				lastAiMoveAni+=1/32.0;
-				if(lastAiMoveAni==0.75) AudioUtil.play(AudioUtil.PIECE_PUT);
-			} else lastAiMove=null;
-		}
-		renderer.paintImmediately(0, 0, renderer.getWidth(), renderer.getHeight());
-		if(winner==Winner.NONE&&game.whoseTurn()==PieceColor.BLACK) {
-			lastAiMove=game.performAiMove();
-			lastAiMoveAni=0;
-			checkForWinner();
-		}
-		if(click!=null) {
-			int mx=click.x-(width/2-256);
-			int my=click.y-(height/2-256);
-			click=null;
-			if(mx>=0&&my>=0) {
-				int boardX=mx/64;
-				int boardY=my/64;
-				if(boardX<8&&boardY<8) {
-					if(hand==null) {
-						Piece p=game.getPiece(boardX, boardY);
-						if(p!=null&&p.getColor()==game.whoseTurn()) {
-							ArrayList<Move> moves=new ArrayList<Move>();
-							game.getMoves(boardX, boardY, moves, true, true);
-							if(moves.size()!=0) {
-								hand=game.getPiece(boardX, boardY);
-								handMoves=moves;
-								game.setPiece(boardX, boardY, null);
-								handFromX=boardX;
-								handFromY=boardY;
-								handRenderX=boardX*64-mx;
-								handRenderY=boardY*64-my;
+		if(!drawErrorPopup) {
+			if(lastAiMove!=null) {
+				if(lastAiMoveAni<1) {
+					lastAiMoveAni+=1/32.0;
+					if(lastAiMoveAni==0.75) AudioUtil.play(AudioUtil.PIECE_PUT);
+				} else lastAiMove=null;
+			}
+			renderer.paintImmediately(0, 0, renderer.getWidth(), renderer.getHeight());
+			if(winner==Winner.NONE&&game.whoseTurn()==PieceColor.BLACK) {
+				lastAiMove=game.performAiMove();
+				lastAiMoveAni=0;
+				checkForWinner();
+			}
+			if(click!=null) {
+				int mx=click.x-(width/2-256);
+				int my=click.y-(height/2-256);
+				click=null;
+				if(mx>=0&&my>=0) {
+					int boardX=mx/64;
+					int boardY=my/64;
+					if(boardX<8&&boardY<8) {
+						if(hand==null) {
+							Piece p=game.getPiece(boardX, boardY);
+							if(p!=null&&p.getColor()==game.whoseTurn()) {
+								ArrayList<Move> moves=new ArrayList<Move>();
+								game.getMoves(boardX, boardY, moves, true, true);
+								if(moves.size()!=0) {
+									hand=game.getPiece(boardX, boardY);
+									handMoves=moves;
+									game.setPiece(boardX, boardY, null);
+									handFromX=boardX;
+									handFromY=boardY;
+									handRenderX=boardX*64-mx;
+									handRenderY=boardY*64-my;
+								}
 							}
-						}
-					} else {
-						int index=boardY*8+boardX;
-						Move m=null;
-						for(Move check:handMoves) {
-							if(index==check.getTo()) {
-								m=check;
-								break;
-							}
-						}
-						if(m!=null) {
-							game.setPiece(handFromX, handFromY, hand);
-							hand=null;
-							game.performMove(m);
-							AudioUtil.play(AudioUtil.PIECE_PUT);
-							checkForWinner();
 						} else {
-							game.setPiece(handFromX, handFromY, hand);
-							hand=null;
+							int index=boardY*8+boardX;
+							Move m=null;
+							for(Move check:handMoves) {
+								if(index==check.getTo()) {
+									m=check;
+									break;
+								}
+							}
+							if(m!=null) {
+								game.setPiece(handFromX, handFromY, hand);
+								hand=null;
+								game.performMove(m);
+								AudioUtil.play(AudioUtil.PIECE_PUT);
+								checkForWinner();
+							} else {
+								game.setPiece(handFromX, handFromY, hand);
+								hand=null;
+							}
 						}
+					} else if(hand!=null) {
+						game.setPiece(handFromX, handFromY, hand);
+						hand=null;
 					}
 				} else if(hand!=null) {
 					game.setPiece(handFromX, handFromY, hand);
 					hand=null;
 				}
-			} else if(hand!=null) {
-				game.setPiece(handFromX, handFromY, hand);
-				hand=null;
 			}
+		} else {
+			renderer.paintImmediately(0, 0, renderer.getWidth(), renderer.getHeight());
 		}
 		
 		long after=System.nanoTime();
@@ -213,6 +222,7 @@ public class Main {
 		drawBoard(graphics);
 		drawHand(graphics);
 		drawBanner(graphics);
+		drawPopup(graphics);
 		
 	}
 	private static void drawBoard(Graphics2D graphics) {
@@ -299,6 +309,16 @@ public class Main {
 			}
 			
 			if(banner!=null) graphics.drawImage(banner, width/2-banner.getWidth()/2, height/2-banner.getHeight()/2, null);
+		}
+	}
+	private static void drawPopup(Graphics2D graphics) {
+		if(drawErrorPopup) {
+			BufferedImage frame=ImageUtil.POPUP_ERROR[errorPopupFrame];
+			if(errorPopupFrame!=30) {
+				errorPopupFrame++;
+			}
+			
+			if(frame!=null) graphics.drawImage(frame, width/2-frame.getWidth()/2, height/2-frame.getHeight()/2, null);
 		}
 	}
 	

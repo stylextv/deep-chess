@@ -32,6 +32,8 @@ public class ImageUtil {
 	public static BufferedImage WHITE_QUEEN;
 	public static BufferedImage WHITE_ROOK;
 	
+	public static BufferedImage[] POPUP_ERROR=new BufferedImage[31];
+	
 	public static BufferedImage[] BANNER_DEFEAT=new BufferedImage[61];
 	public static BufferedImage[] BANNER_VICTORY=new BufferedImage[61];
 	public static BufferedImage[] BANNER_DRAW=new BufferedImage[61];
@@ -97,6 +99,10 @@ public class ImageUtil {
 //			image=blurImage(image, 34);
 //			ImageIO.write(image, "PNG", new File("src/assets/textures/board/shadow.png"));
 			
+//			BufferedImage error=loadImage("icons/error.png");
+//			for(int i=0; i<31; i++) {
+//				savePopup("Stockfish nicht gefunden!", "error/"+i+".png", error, (i+1)/31.0);
+//			}
 //			for(int i=0; i<30; i++) {
 //				saveBanner("NIEDERLAGE", "defeat/"+i+".png", (i+1)/31.0, -1);
 //				saveBanner("NIEDERLAGE", "defeat/"+(i+31)+".png", 1-((i+1)/31.0), 1);
@@ -109,6 +115,16 @@ public class ImageUtil {
 //			saveBanner("SIEG", "victory/30.png", 1, -1);
 //			saveBanner("UNENTSCHIEDEN", "draw/30.png", 1, -1);
 			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		}
+	}
+	public static void loadErrorPopup() {
+		try {
+			for(int i=0; i<31; i++) {
+				POPUP_ERROR[i]=loadImage("overlay/error/"+i+".png");
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.exit(1);
@@ -154,6 +170,51 @@ public class ImageUtil {
 //		graphics.drawString(s2, width/2-graphics.getFontMetrics().stringWidth(s2)/2, height/2+graphics.getFontMetrics().getHeight()/3+70+j);
 //		
 //		int k=(int)Math.round(120*(1-d)*dir);
+//		BufferedImage image2=new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+//		for(int x=0; x<width; x++) {
+//			for(int y=0; y<height; y++) {
+//				Color c=new Color(image.getRGB(x, y),true);
+//				int setY=y+k;
+//				if(setY>=0&&setY<image2.getHeight()) image2.setRGB(x, setY, new Color(c.getRed(),c.getGreen(),c.getBlue(),(int)Math.round(c.getAlpha()*d)).getRGB());
+//			}
+//		}
+//		ImageIO.write(image2, "PNG", new File("src/assets/textures/overlay/"+path));
+//	}
+//	private static void savePopup(String title, String path, BufferedImage icon, double d) throws IOException {
+//		d=sigmoid(d);
+//		
+//		BufferedImage image=new BufferedImage(680, 680, BufferedImage.TYPE_INT_ARGB);
+//		int width=image.getWidth();
+//		int height=image.getHeight();
+//		BufferedImage bannerShadow=new BufferedImage(680, 680, BufferedImage.TYPE_INT_ARGB);
+//		Graphics2D graphics2=(Graphics2D) bannerShadow.getGraphics();
+//		RenderUtil.setRenderingHints(graphics2);
+//		int bannerWidth=335;
+//		int bannerHeight=235;
+//		int roundness=35;
+//		graphics2.setColor(new Color(25,25,33,74));
+//		graphics2.fillRoundRect(width/2-bannerWidth/2, height/2-bannerHeight/2, bannerWidth, bannerHeight, roundness, roundness);
+//		bannerShadow=blurImage(bannerShadow, 28);
+//		
+//		Graphics2D graphics=(Graphics2D) image.getGraphics();
+//		RenderUtil.setRenderingHints(graphics);
+//		
+//		int area=512+64;
+//		for(int x=0; x<width; x++) {
+//			for(int y=0; y<area; y++) {
+//				int ry=height/2-area/2+y;
+//				image.setRGB(x, ry+4, bannerShadow.getRGB(x, ry));
+//			}
+//		}
+//		graphics.setColor(Vars.PRIMARY_COLOR2);
+//		graphics.fillRoundRect(width/2-bannerWidth/2, height/2-bannerHeight/2, bannerWidth, bannerHeight, roundness, roundness);
+//		int j=-21;
+//		graphics.drawImage(icon, width/2-icon.getWidth()/2,height/2-icon.getHeight()/2+j, null);
+//		graphics.setColor(Vars.PRIMARY_COLOR1);
+//		graphics.setFont(new Font("Renogare Regular", 0, 20));
+//		graphics.drawString(title, width/2-graphics.getFontMetrics().stringWidth(title)/2, height/2+graphics.getFontMetrics().getHeight()/3+icon.getWidth()/2+25+j);
+//		
+//		int k=(int)Math.round(30*(1-d));
 //		BufferedImage image2=new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 //		for(int x=0; x<width; x++) {
 //			for(int y=0; y<height; y++) {

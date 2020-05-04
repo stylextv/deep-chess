@@ -19,7 +19,7 @@ public class StockfishAi {
 	private static Game inputGame;
 	private static String outputMove;
 	
-	public static void start() {
+	public static boolean start() {
 		try {
 			running=true;
 			process = new ProcessBuilder("engines/stockfish_20011801_x64.exe").start();
@@ -57,9 +57,9 @@ public class StockfishAi {
 				running=false;
 			}).start();
 		} catch (IOException ex) {
-			ex.printStackTrace();
-			System.exit(1);
+			return false;
 		}
+		return true;
 	}
 	private static void writeLine(BufferedWriter bw, String s) throws IOException {
 		bw.write(s);
