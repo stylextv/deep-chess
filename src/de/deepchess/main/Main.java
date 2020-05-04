@@ -33,12 +33,14 @@ public class Main {
 	private static boolean running=true;
 	private static int width,height;
 	private static int mouseX,mouseY;
+	private static int mouseXMoved;
 	
 	private static Game game;
 	private static Piece hand;
 	private static ArrayList<Move> handMoves;
 	private static int handFromX,handFromY;
 	private static int handRenderX,handRenderY;
+	private static double handRotation;
 	private static Point click;
 	
 	private static Move lastAiMove;
@@ -200,6 +202,7 @@ public class Main {
 		height=renderer.getHeight();
 		Point mouse=renderer.getMousePosition();
 		if(mouse!=null) {
+			mouseXMoved=mouse.x-mouseX;
 			mouseX=mouse.x;
 			mouseY=mouse.y;
 		}
@@ -254,7 +257,16 @@ public class Main {
 //				int to=m.getTo();
 //				graphics.fillArc(ox+to%8*64+32-10, oy+to/8*64+32-10, 20, 20, 0, 360);
 //			}
-			graphics.drawImage(hand.getImage(), mouseX+handRenderX, mouseY+handRenderY -4, null);
+			
+			BufferedImage handImage=hand.getImage();
+			AffineTransform trans=new AffineTransform();
+			trans.translate(mouseX+handRenderX, mouseY+handRenderY -4);
+			double targetValue=mouseXMoved*4;
+			if(targetValue>90) targetValue=90;
+			else if(targetValue<-90) targetValue=-90;
+			handRotation=MathUtil.lerp(handRotation, targetValue, 0.25);
+			trans.rotate(Math.toRadians(handRotation), handImage.getWidth()/2, 10);
+			graphics.drawImage(handImage, trans, null);
 		}
 	}
 	private static void drawBanner(Graphics2D graphics) {
