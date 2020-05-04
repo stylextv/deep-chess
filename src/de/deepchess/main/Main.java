@@ -104,12 +104,10 @@ public class Main {
 			public void mouseClicked(MouseEvent e) {
 				if(winner==Winner.NONE) {
 					
-					if(game.whoseTurn()==PieceColor.WHITE) {
-						if(e.getButton()==MouseEvent.BUTTON1) {
-							Point mouse=renderer.getMousePosition();
-							if(mouse!=null) {
-								click=mouse;
-							}
+					if(game.whoseTurn()==PieceColor.WHITE&&e.getButton()==MouseEvent.BUTTON1) {
+						Point mouse=renderer.getMousePosition();
+						if(mouse!=null) {
+							click=mouse;
 						}
 					}
 					
