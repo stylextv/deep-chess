@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.JFrame;
 
@@ -26,6 +27,8 @@ import de.deepchess.util.ImageUtil;
 import de.deepchess.util.MathUtil;
 
 public class Main {
+	
+	public static String LANGUAGE="english";
 	
 	private static JFrame frame;
 	private static Renderer renderer;
@@ -53,6 +56,9 @@ public class Main {
 	private static boolean resetGame=false;
 	
 	public static void main(String[] args) {
+		String lang=Locale.getDefault().getLanguage();
+		if(lang.equals(new Locale("de").getLanguage())) LANGUAGE="german";
+		
 		if(!StockfishAi.start()) {
 			ImageUtil.loadErrorPopup();
 			drawErrorPopup=true;

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import de.deepchess.main.Main;
+
 public class ImageUtil {
 	
 	public static ArrayList<BufferedImage> ICONS=new ArrayList<BufferedImage>();
@@ -70,9 +72,9 @@ public class ImageUtil {
 				public void run() {
 					try {
 						for(int i=0; i<61; i++) {
-							BANNER_DEFEAT[i]=loadImage("overlay/defeat/"+i+".png");
-							BANNER_VICTORY[i]=loadImage("overlay/victory/"+i+".png");
-							BANNER_DRAW[i]=loadImage("overlay/draw/"+i+".png");
+							BANNER_DEFEAT[i]=loadImage("overlay/"+Main.LANGUAGE+"/defeat/"+i+".png");
+							BANNER_VICTORY[i]=loadImage("overlay/"+Main.LANGUAGE+"/victory/"+i+".png");
+							BANNER_DRAW[i]=loadImage("overlay/"+Main.LANGUAGE+"/draw/"+i+".png");
 						}
 					} catch (Exception ex) {}
 				}
@@ -101,19 +103,19 @@ public class ImageUtil {
 			
 //			BufferedImage error=loadImage("icons/error.png");
 //			for(int i=0; i<31; i++) {
-//				savePopup("Stockfish nicht gefunden!", "error/"+i+".png", error, (i+1)/31.0);
+//				savePopup("Stockfish not found!", "english/error/"+i+".png", error, (i+1)/31.0);
 //			}
 //			for(int i=0; i<30; i++) {
-//				saveBanner("NIEDERLAGE", "defeat/"+i+".png", (i+1)/31.0, -1);
-//				saveBanner("NIEDERLAGE", "defeat/"+(i+31)+".png", 1-((i+1)/31.0), 1);
-//				saveBanner("SIEG", "victory/"+i+".png", (i+1)/31.0, -1);
-//				saveBanner("SIEG", "victory/"+(i+31)+".png", 1-((i+1)/31.0), 1);
-//				saveBanner("UNENTSCHIEDEN", "draw/"+i+".png", (i+1)/31.0, -1);
-//				saveBanner("UNENTSCHIEDEN", "draw/"+(i+31)+".png", 1-((i+1)/31.0), 1);
+//				saveBanner("DEFEAT", "english/defeat/"+i+".png", (i+1)/31.0, -1);
+//				saveBanner("DEFEAT", "english/defeat/"+(i+31)+".png", 1-((i+1)/31.0), 1);
+//				saveBanner("VICTORY", "english/victory/"+i+".png", (i+1)/31.0, -1);
+//				saveBanner("VICTORY", "english/victory/"+(i+31)+".png", 1-((i+1)/31.0), 1);
+//				saveBanner("DRAW", "english/draw/"+i+".png", (i+1)/31.0, -1);
+//				saveBanner("DRAW", "english/draw/"+(i+31)+".png", 1-((i+1)/31.0), 1);
 //			}
-//			saveBanner("NIEDERLAGE", "defeat/30.png", 1, -1);
-//			saveBanner("SIEG", "victory/30.png", 1, -1);
-//			saveBanner("UNENTSCHIEDEN", "draw/30.png", 1, -1);
+//			saveBanner("DEFEAT", "english/defeat/30.png", 1, -1);
+//			saveBanner("VICTORY", "english/victory/30.png", 1, -1);
+//			saveBanner("DRAW", "english/draw/30.png", 1, -1);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -123,7 +125,7 @@ public class ImageUtil {
 	public static void loadErrorPopup() {
 		try {
 			for(int i=0; i<31; i++) {
-				POPUP_ERROR[i]=loadImage("overlay/error/"+i+".png");
+				POPUP_ERROR[i]=loadImage("overlay/"+Main.LANGUAGE+"/error/"+i+".png");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -166,7 +168,7 @@ public class ImageUtil {
 //		graphics.setFont(new Font("Renogare Regular", 0, 66));
 //		graphics.drawString(title, width/2-graphics.getFontMetrics().stringWidth(title)/2, height/2+graphics.getFontMetrics().getHeight()/3+j);
 //		graphics.setFont(new Font("Renogare Regular", 1, 22));
-//		String s2="Drücke die Maus";
+//		String s2="Press the mouse";
 //		graphics.drawString(s2, width/2-graphics.getFontMetrics().stringWidth(s2)/2, height/2+graphics.getFontMetrics().getHeight()/3+70+j);
 //		
 //		int k=(int)Math.round(120*(1-d)*dir);
