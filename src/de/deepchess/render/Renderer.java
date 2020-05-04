@@ -17,7 +17,6 @@ public class Renderer extends JPanel {
 			Main.drawFrame((Graphics2D) g);
 		} catch(Exception ex) {
 			ex.printStackTrace();
-			System.exit(1);
 		}
 	}
 	

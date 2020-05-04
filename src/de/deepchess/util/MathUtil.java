@@ -7,8 +7,7 @@ public class MathUtil {
 	}
 	
 	public static double lerp(double a, double b, double speed) {
-		a=a + (b-a)*speed;
-		return a;
+		return a + (b-a)*speed;
 	}
 	
 }

@@ -86,8 +86,10 @@ public class MinimaxAi {
 			switch(winner) {
 			case BLACK:
 				score=INFINITY;
+				break;
 			case WHITE:
 				score=-INFINITY;
+				break;
 			default:
 				break;
 			}
@@ -173,8 +175,10 @@ public class MinimaxAi {
 			switch(winner) {
 			case BLACK:
 				score=INFINITY;
+				break;
 			case WHITE:
 				score=-INFINITY;
+				break;
 			default:
 				break;
 			}
