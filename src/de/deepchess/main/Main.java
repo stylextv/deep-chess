@@ -318,7 +318,7 @@ public class Main {
 	private static void drawPopup(Graphics2D graphics) {
 		if(drawErrorPopup) {
 			BufferedImage frame=ImageUtil.POPUP_ERROR[errorPopupFrame];
-			if(errorPopupFrame!=30) {
+			if(errorPopupFrame!=60) {
 				errorPopupFrame++;
 			}
 			

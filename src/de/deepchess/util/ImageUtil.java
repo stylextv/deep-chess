@@ -34,7 +34,7 @@ public class ImageUtil {
 	public static BufferedImage WHITE_QUEEN;
 	public static BufferedImage WHITE_ROOK;
 	
-	public static BufferedImage[] POPUP_ERROR=new BufferedImage[31];
+	public static BufferedImage[] POPUP_ERROR=new BufferedImage[61];
 	
 	public static BufferedImage[] BANNER_DEFEAT=new BufferedImage[61];
 	public static BufferedImage[] BANNER_VICTORY=new BufferedImage[61];
@@ -102,8 +102,11 @@ public class ImageUtil {
 //			ImageIO.write(image, "PNG", new File("src/assets/textures/board/shadow.png"));
 			
 //			BufferedImage error=loadImage("icons/error.png");
-//			for(int i=0; i<31; i++) {
-//				savePopup("Stockfish not found!", "english/error/"+i+".png", error, (i+1)/31.0);
+//			for(int i=0; i<61; i++) {
+//				savePopup("Stockfish not found!", "english/error/"+i+".png", error, (i+1)/61.0);
+//			}
+//			for(int i=0; i<61; i++) {
+//				savePopup("Stockfish nicht gefunden!", "german/error/"+i+".png", error, (i+1)/61.0);
 //			}
 //			for(int i=0; i<30; i++) {
 //				saveBanner("DEFEAT", "english/defeat/"+i+".png", (i+1)/31.0, -1);
@@ -124,7 +127,7 @@ public class ImageUtil {
 	}
 	public static void loadErrorPopup() {
 		try {
-			for(int i=0; i<31; i++) {
+			for(int i=0; i<61; i++) {
 				POPUP_ERROR[i]=loadImage("overlay/"+Main.LANGUAGE+"/error/"+i+".png");
 			}
 		} catch (Exception ex) {
